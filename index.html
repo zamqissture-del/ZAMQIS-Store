@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,11 +8,10 @@
 *{box-sizing:border-box}
 body{margin:0;background:#080817;color:#fff;font-family:Arial,sans-serif}
 header{background:linear-gradient(110deg,#100829,#17164b,#370c60);padding:18px 12px;border-bottom:2px solid #713cff;text-align:center}
-.logo{font-size:30px;font-weight:900;color:#fff;text-shadow:0 0 15px #a45cff}
+.logo{font-size:30px;font-weight:900;text-shadow:0 0 15px #a45cff}
 header p{margin:5px;color:#d5c8ef}
 nav{display:flex;justify-content:center;gap:10px;padding:12px;background:#101027}
 button{border:0;border-radius:9px;padding:11px 15px;background:#713cff;color:white;font-weight:bold;cursor:pointer}
-button:hover{filter:brightness(1.2)}
 .layout{max-width:1250px;margin:auto;padding:12px;display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
 .panel{background:linear-gradient(145deg,#17172f,#0e142a);border:1px solid #514080;border-radius:15px;padding:15px;margin-bottom:13px;box-shadow:0 0 12px #5421a533}
 h2{font-size:19px;color:#d6baff;margin:3px 0 14px}
@@ -21,8 +19,9 @@ h2{font-size:19px;color:#d6baff;margin:3px 0 14px}
 .banner h1{font-size:30px;margin:5px;text-shadow:0 0 12px #c18aff}
 .banner p{color:#eee0ff}
 .games{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.game{background:#191f3b;border:1px solid #55528d;padding:17px 5px;border-radius:12px;color:white}
+.game{background:#191f3b;border:1px solid #55528d;padding:12px 5px;border-radius:12px;color:white;min-height:125px;font-size:13px}
 .game span{display:block;font-size:30px;margin-bottom:8px}
+.game img{width:100%;height:75px;object-fit:contain;display:block;margin:0 auto 8px}
 .game.active{background:linear-gradient(130deg,#4a1ca0,#123a78);outline:2px solid #32c9ff;box-shadow:0 0 15px #168bff}
 .products{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
 .product{background:#202443;border:1px solid #494a7a;border-radius:12px;padding:12px;text-align:center}
@@ -43,8 +42,6 @@ input,select{width:100%;padding:12px;margin-top:6px;border-radius:8px;background
 .sidebar{background:#0b1027;border:1px solid #34335d;border-radius:12px;padding:10px}
 .sidebar button{display:block;width:100%;margin:5px 0;text-align:left;background:#202440}
 .admin-section{background:#15182f;border:1px solid #42416c;padding:14px;border-radius:12px;margin-bottom:12px}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{padding:9px;border-bottom:1px solid #45405f;text-align:left}
 .danger{background:#bd2949}
 footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding:22px;color:#c8b2ee}
 @media(max-width:800px){
@@ -53,6 +50,10 @@ footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding
 .admin-menu{grid-template-columns:1fr}
 .sidebar{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
 .banner h1{font-size:23px}
+}
+@media(max-width:380px){
+.games{grid-template-columns:1fr}
+.game{min-height:100px}
 }
 </style>
 </head>
@@ -70,6 +71,7 @@ footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding
 
 <div id="store" class="layout">
 <main>
+
 <div class="banner">
 <h1>⚡ TOP UP GAME ⚡</h1>
 <h1>LEBIH MUDAH & MURAH!</h1>
@@ -78,10 +80,23 @@ footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding
 
 <section class="panel">
 <h2>🎮 PILIH GAME</h2>
+
 <div class="games">
-<button class="game active" onclick="chooseGame('Mobile Legends',this)"><span>💎</span>Mobile Legends</button>
-<button class="game" onclick="chooseGame('PUBG Mobile',this)"><span>🎯</span>PUBG Mobile</button>
-<button class="game" onclick="chooseGame('Free Fire',this)"><span>🔥</span>Free Fire</button>
+
+<button class="game active" onclick="chooseGame('Mobile Legends',this)">
+<span>💎</span>Mobile Legends
+</button>
+
+<button class="game" onclick="chooseGame('PUBG Mobile',this)">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pubg_mobile_logo.png" alt="PUBG Mobile">
+PUBG Mobile
+</button>
+
+<button class="game" onclick="chooseGame('Free Fire',this)">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Freefirelogo.png" alt="Garena Free Fire">
+Garena Free Fire
+</button>
+
 </div>
 </section>
 
@@ -92,26 +107,35 @@ footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding
 
 <section class="panel">
 <h2>👤 DATA PEMBELI</h2>
+
 <form id="orderForm">
 <label>Game dipilih</label>
 <input id="gameName" value="Mobile Legends" readonly>
+
 <label>ID Game</label>
 <input id="playerId" required placeholder="Masukkan ID Game">
+
 <div id="zoneWrap">
 <label>Zone ID (Mobile Legends)</label>
 <input id="zoneId" placeholder="Masukkan Zone ID">
 </div>
+
 <label>Nickname</label>
 <input id="nickname" required placeholder="Masukkan nickname">
+
 <label>Nomor WhatsApp kamu</label>
 <input id="buyerPhone" required placeholder="08xxxxxxxxxx">
+
 <label>Paket dipilih</label>
 <input id="packageName" readonly required placeholder="Pilih paket terlebih dahulu">
+
 <label>Harga</label>
 <input id="packagePrice" readonly>
+
 <button class="whatsapp" type="submit">🟢 PESAN SEKARANG VIA WHATSAPP</button>
 </form>
 </section>
+
 </main>
 
 <aside>
@@ -122,6 +146,7 @@ footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding
 <p id="qrisEmpty" class="small">QRIS belum diunggah oleh admin.</p>
 <p class="small">Simpan bukti pembayaran dan konfirmasi kepada admin.</p>
 </section>
+
 <section class="panel">
 <h2>⭐ KEUNGGULAN KAMI</h2>
 <div class="features">
@@ -135,6 +160,7 @@ footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding
 </div>
 
 <div id="admin" class="layout" style="display:none;grid-template-columns:1fr">
+
 <section class="panel" id="loginBox">
 <h2>🔐 LOGIN ADMIN ZAMQIS</h2>
 <label>Password admin</label>
@@ -145,11 +171,14 @@ footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding
 
 <div id="dashboard" style="display:none">
 <section class="panel">
+
 <div style="display:flex;justify-content:space-between;align-items:center">
 <h2>👑 ZAMQIS ADMIN PANEL</h2>
 <button class="danger" onclick="logout()">Logout</button>
 </div>
+
 <div class="admin-menu">
+
 <div class="sidebar">
 <button onclick="adminTab('settings')">⚙️ Pengaturan Toko</button>
 <button onclick="adminTab('add')">➕ Tambah Produk</button>
@@ -160,6 +189,7 @@ footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding
 </div>
 
 <div>
+
 <div id="settings" class="admin-section">
 <h2>⚙️ PENGATURAN TOKO</h2>
 <label>Nama toko</label>
@@ -209,6 +239,7 @@ footer{text-align:center;background:#100b27;border-top:2px solid #713cff;padding
 <input type="password" id="newPassword">
 <button class="primary" onclick="changePassword()">SIMPAN PASSWORD</button>
 </div>
+
 </div>
 </div>
 </section>
@@ -232,151 +263,293 @@ const defaults=[
 {game:"Free Fire",name:"140 Diamond",price:20000},
 {game:"Free Fire",name:"355 Diamond",price:48000}
 ];
+
 function getData(key,fallback){
-try{return JSON.parse(localStorage.getItem(key))??fallback}catch(e){return fallback}
+try{return JSON.parse(localStorage.getItem(key))??fallback}
+catch(e){return fallback}
 }
-function putData(key,value){localStorage.setItem(key,JSON.stringify(value))}
+
+function putData(key,value){
+localStorage.setItem(key,JSON.stringify(value))
+}
+
 let products=getData("zam_products",defaults);
 let currentGame="Mobile Legends";
 let selected=null;
 let wa=localStorage.getItem("zam_wa")||"6281234567890";
 let pass=localStorage.getItem("zam_pass")||"zamqis123";
-function rupiah(n){return "Rp"+Number(n).toLocaleString("id-ID")}
+
+function rupiah(n){
+return "Rp"+Number(n).toLocaleString("id-ID")
+}
+
 function chooseGame(name,button){
-currentGame=name;selected=null;
+currentGame=name;
+selected=null;
+
 document.querySelectorAll(".game").forEach(b=>b.classList.remove("active"));
 button.classList.add("active");
+
 document.getElementById("gameName").value=name;
 document.getElementById("packageName").value="";
 document.getElementById("packagePrice").value="";
+
 document.getElementById("zoneWrap").style.display=name==="Mobile Legends"?"block":"none";
+document.getElementById("zoneId").required=name==="Mobile Legends";
+
 renderProducts();
 }
+
 function renderProducts(){
-let area=document.getElementById("products");area.innerHTML="";
+let area=document.getElementById("products");
+area.innerHTML="";
+
 products.filter(p=>p.game===currentGame).forEach(p=>{
-let card=document.createElement("div");card.className="product";
-let emoji=document.createElement("div");emoji.className="emoji";emoji.textContent=currentGame==="PUBG Mobile"?"🎯":currentGame==="Free Fire"?"🔥":"💎";
-let title=document.createElement("h3");title.textContent=p.name;
-let price=document.createElement("div");price.className="price";price.textContent=rupiah(p.price);
-let btn=document.createElement("button");btn.textContent="PILIH";
+let card=document.createElement("div");
+card.className="product";
+
+let emoji=document.createElement("div");
+emoji.className="emoji";
+emoji.textContent=currentGame==="PUBG Mobile"?"🎯":currentGame==="Free Fire"?"🔥":"💎";
+
+let title=document.createElement("h3");
+title.textContent=p.name;
+
+let price=document.createElement("div");
+price.className="price";
+price.textContent=rupiah(p.price);
+
+let btn=document.createElement("button");
+btn.textContent="PILIH";
+
 btn.onclick=()=>{
 selected=p;
 document.getElementById("packageName").value=p.name;
 document.getElementById("packagePrice").value=rupiah(p.price);
 document.getElementById("playerId").scrollIntoView({behavior:"smooth"});
 };
-card.append(emoji,title,price,btn);area.append(card);
+
+card.append(emoji,title,price,btn);
+area.append(card);
 });
-if(!area.children.length)area.textContent="Belum ada paket untuk game ini.";
+
+if(!area.children.length){
+area.textContent="Belum ada paket untuk game ini.";
 }
+}
+
 document.getElementById("orderForm").addEventListener("submit",e=>{
 e.preventDefault();
+
 if(!selected)return alert("Silakan pilih paket terlebih dahulu.");
+
 let order={
 game:currentGame,
 id:document.getElementById("playerId").value,
 zone:document.getElementById("zoneId").value,
 nickname:document.getElementById("nickname").value,
 buyer:document.getElementById("buyerPhone").value,
-product:selected.name,price:selected.price,
+product:selected.name,
+price:selected.price,
 date:new Date().toLocaleString("id-ID")
 };
-let list=getData("zam_orders",[]);list.unshift(order);putData("zam_orders",list);
-let msg=`PESANAN ZAMQIS STORE\nGame: ${order.game}\nID: ${order.id}\nZone: ${order.zone||"-"}\nNickname: ${order.nickname}\nPaket: ${order.product}\nHarga: ${rupiah(order.price)}\nWA pembeli: ${order.buyer}\nMohon konfirmasi pesanan saya.`;
+
+let list=getData("zam_orders",[]);
+list.unshift(order);
+putData("zam_orders",list);
+
+let msg=`PESANAN ZAMQIS STORE
+Game: ${order.game}
+ID: ${order.id}
+Zone: ${order.zone||"-"}
+Nickname: ${order.nickname}
+Paket: ${order.product}
+Harga: ${rupiah(order.price)}
+WA pembeli: ${order.buyer}
+Mohon konfirmasi pesanan saya.`;
+
 window.open("https://wa.me/"+wa+"?text="+encodeURIComponent(msg),"_blank");
 });
-function showStore(){document.getElementById("store").style.display="grid";document.getElementById("admin").style.display="none"}
-function showAdmin(){document.getElementById("store").style.display="none";document.getElementById("admin").style.display="grid"}
+
+function showStore(){
+document.getElementById("store").style.display="grid";
+document.getElementById("admin").style.display="none";
+}
+
+function showAdmin(){
+document.getElementById("store").style.display="none";
+document.getElementById("admin").style.display="grid";
+}
+
 function login(){
 if(document.getElementById("password").value===pass){
 document.getElementById("loginBox").style.display="none";
 document.getElementById("dashboard").style.display="block";
 renderAdmin();
-}else alert("Password salah.");
+}else{
+alert("Password salah.");
 }
+}
+
 function logout(){
 document.getElementById("dashboard").style.display="none";
 document.getElementById("loginBox").style.display="block";
 document.getElementById("password").value="";
 }
+
 function adminTab(id){
-["settings","add","manage","qris","orders","passwordTab"].forEach(x=>document.getElementById(x).style.display=x===id?"block":"none");
+["settings","add","manage","qris","orders","passwordTab"].forEach(x=>{
+document.getElementById(x).style.display=x===id?"block":"none";
+});
 }
+
 function saveSettings(){
 let number=document.getElementById("waNumber").value.replace(/\D/g,"");
 if(!number)return alert("Masukkan nomor WhatsApp admin.");
-wa=number;localStorage.setItem("zam_wa",wa);
-let name=document.getElementById("shopName").value;
+
+wa=number;
+localStorage.setItem("zam_wa",wa);
+
+let name=document.getElementById("shopName").value.trim()||"ZAMQIS STORE";
 document.querySelector(".logo").textContent="👑 "+name;
+localStorage.setItem("zam_shop",name);
+
 alert("Pengaturan disimpan.");
 }
+
 function addProduct(){
 let name=document.getElementById("newName").value.trim();
 let price=Number(document.getElementById("newPrice").value);
+
 if(!name||price<=0)return alert("Isi nama dan harga dengan benar.");
-products.push({game:document.getElementById("newGame").value,name,price});
+
+products.push({
+game:document.getElementById("newGame").value,
+name,
+price
+});
+
 putData("zam_products",products);
 document.getElementById("newName").value="";
 document.getElementById("newPrice").value="";
-renderAdmin();renderProducts();
+renderAdmin();
+renderProducts();
 }
+
 function renderAdmin(){
-let area=document.getElementById("productList");area.innerHTML="";
+let area=document.getElementById("productList");
+area.innerHTML="";
+
 products.forEach((p,i)=>{
-let div=document.createElement("div");div.className="product";div.style.margin="8px 0";
-let info=document.createElement("p");info.textContent=p.game+" - "+p.name+" - "+rupiah(p.price);
-let edit=document.createElement("button");edit.textContent="Edit harga";
+let div=document.createElement("div");
+div.className="product";
+div.style.margin="8px 0";
+
+let info=document.createElement("p");
+info.textContent=p.game+" - "+p.name+" - "+rupiah(p.price);
+
+let edit=document.createElement("button");
+edit.textContent="Edit harga";
 edit.onclick=()=>{
 let v=prompt("Masukkan harga baru",p.price);
-if(v!==null&&Number(v)>0){products[i].price=Number(v);putData("zam_products",products);renderAdmin();renderProducts()}
+if(v!==null&&Number(v)>0){
+products[i].price=Number(v);
+putData("zam_products",products);
+renderAdmin();
+renderProducts();
+}
 };
-let del=document.createElement("button");del.textContent="Hapus";del.className="danger";del.style.marginLeft="5px";
+
+let del=document.createElement("button");
+del.textContent="Hapus";
+del.className="danger";
+del.style.marginLeft="5px";
 del.onclick=()=>{
-if(confirm("Hapus produk ini?")){products.splice(i,1);putData("zam_products",products);renderAdmin();renderProducts()}
+if(confirm("Hapus produk ini?")){
+products.splice(i,1);
+putData("zam_products",products);
+renderAdmin();
+renderProducts();
+}
 };
-div.append(info,edit,del);area.append(div);
+
+div.append(info,edit,del);
+area.append(div);
 });
+
 let orders=getData("zam_orders",[]);
-let out=document.getElementById("orderList");out.innerHTML="";
+let out=document.getElementById("orderList");
+out.innerHTML="";
+
 if(!orders.length)out.textContent="Belum ada pesanan.";
+
 orders.forEach((o,i)=>{
-let div=document.createElement("div");div.className="product";div.style.margin="8px 0";
+let div=document.createElement("div");
+div.className="product";
+div.style.margin="8px 0";
 div.textContent=(i+1)+". "+o.game+" | "+o.product+" | "+rupiah(o.price)+" | ID "+o.id+" | "+o.date;
 out.append(div);
 });
+
 document.getElementById("waNumber").value=wa;
+document.getElementById("shopName").value=localStorage.getItem("zam_shop")||"ZAMQIS STORE";
 }
+
 function uploadQris(){
 let file=document.getElementById("qrisFile").files[0];
 if(!file)return alert("Pilih gambar QRIS.");
 if(file.size>400000)return alert("Ukuran gambar maksimal 400 KB.");
+
 let reader=new FileReader();
 reader.onload=()=>{
 localStorage.setItem("zam_qris",reader.result);
-renderQris();alert("QRIS disimpan di browser ini.");
+renderQris();
+alert("QRIS disimpan di browser ini.");
 };
 reader.readAsDataURL(file);
 }
+
 function renderQris(){
 let data=localStorage.getItem("zam_qris");
 let img=document.getElementById("qrisImage");
 let empty=document.getElementById("qrisEmpty");
-if(data){img.src=data;img.style.display="inline-block";empty.style.display="none"}
-else{img.style.display="none";empty.style.display="block"}
+
+if(data){
+img.src=data;
+img.style.display="inline-block";
+empty.style.display="none";
+}else{
+img.style.display="none";
+empty.style.display="block";
 }
-function removeQris(){localStorage.removeItem("zam_qris");renderQris()}
+}
+
+function removeQris(){
+localStorage.removeItem("zam_qris");
+renderQris();
+}
+
 function clearOrders(){
-if(confirm("Hapus seluruh pesanan?")){localStorage.removeItem("zam_orders");renderAdmin()}
+if(confirm("Hapus seluruh pesanan?")){
+localStorage.removeItem("zam_orders");
+renderAdmin();
 }
+}
+
 function changePassword(){
 let value=document.getElementById("newPassword").value;
 if(value.length<6)return alert("Password minimal 6 karakter.");
-pass=value;localStorage.setItem("zam_pass",pass);
+
+pass=value;
+localStorage.setItem("zam_pass",pass);
 document.getElementById("newPassword").value="";
 alert("Password diganti.");
 }
-renderProducts();renderQris();
+
+document.querySelector(".logo").textContent="👑 "+(localStorage.getItem("zam_shop")||"ZAMQIS STORE");
+
+renderProducts();
+renderQris();
 </script>
 </body>
 </html>
