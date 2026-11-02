@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZAMQIS STORE</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #080d1b;
+  color: white;
+}
+
+header {
+  background: #111c32;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #36e0d0;
+}
+
+.logo {
+  font-size: 23px;
+  font-weight: bold;
+  color: white;
+}
+
+.logo span {
+  color: #36e0d0;
+}
+
+.admin {
+  color: white;
+  text-decoration: none;
+  border: 1px solid #36e0d0;
+  padding: 9px 13px;
+  border-radius: 8px;
+}
+
+.hero {
+  padding: 35px 20px;
+  text-align: center;
+  background: linear-gradient(135deg,#142c4d,#251b4c);
+}
+
+.hero h1 {
+  font-size: 35px;
+  margin-bottom: 12px;
+}
+
+.hero h1 span {
+  color: #36e0d0;
+}
+
+.hero p {
+  color: #b8c7dc;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 25px 15px;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+.games {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.game {
+  background: #172640;
+  color: white;
+  border: 2px solid #293b58;
+  padding: 18px 5px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.game.active {
+  border-color: #36e0d0;
+  background: #17434b;
+  color: #36e0d0;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 12px;
+}
+
+.product {
+  background: #14223a;
+  border: 2px solid #293b58;
+  border-radius: 12px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.product.active {
+  border-color: #36e0d0;
+}
+
+.product h3 {
+  margin-bottom: 8px;
+}
+
+.product p {
+  color: #36e0d0;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.form {
+  background: #14223a;
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 25px;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #40516d;
+  background: #091322;
+  color: white;
+}
+
+button.pay {
+  width: 100%;
+  padding: 14px;
+  background: #36e0d0;
+  color: #07151b;
+  border: none;
+  border-radius: 9px;
+  font-weight: bold;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .4;
+}
+
+#payment {
+  display: none;
+  background: #14223a;
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+#payment img {
+  width: 220px;
+  max-width: 100%;
+  background: white;
+  padding: 8px;
+  border-radius: 10px;
+  margin: 15px;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #8da0bb;
+  border-top: 1px solid #293b58;
+  margin-top: 35px;
+}
+
+@media(max-width:480px) {
+  .hero h1 { font-size: 28px; }
+  .game { font-size: 12px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">ZAMQIS <span>STORE.</span></div>
+  <a class="admin" href="admin.html">ADMIN</a>
+</header>
+
+<section class="hero">
+  <h1>TOP UP <span>GAME</span></h1>
+  <p>Murah • Cepat • Aman</p>
+  <p>Top up game favoritmu sekarang!</p>
+</section>
+
+<div class="container">
+
+  <h2>Pilih Game</h2>
+
+  <div class="games">
+    <button class="game active" onclick="pilihGame('ML',this)">
+      MOBILE LEGENDS
+    </button>
+
+    <button class="game" onclick="pilihGame('PUBG',this)">
+      PUBG MOBILE
+    </button>
+
+    <button class="game" onclick="pilihGame('FF',this)">
+      FREE FIRE
+    </button>
+  </div>
+
+  <h2 id="judul">Pilih Diamond ML</h2>
+
+  <div class="products" id="products"></div>
+
+  <div class="form">
+    <h2>Detail Pesanan</h2>
+
+    <input id="idgame" placeholder="Masukkan ID Game">
+    <input id="zone" placeholder="Zone ID (jika diperlukan)">
+    <input id="nickname" placeholder="Nickname (opsional)">
+
+    <p id="pilihan" style="margin-top:12px">
+      Produk: Belum dipilih
+    </p>
+
+    <p id="harga" style="color:#36e0d0;margin-top:10px">
+      Total: Rp0
+    </p>
+
+    <button class="pay" id="bayar" onclick="buatPesanan()" disabled>
+      BAYAR SEKARANG
+    </button>
+  </div>
+
+  <div id="payment">
+    <h2>PEMBAYARAN QRIS</h2>
+    <p>Silakan scan QRIS berikut.</p>
+
+    <img id="gambarQR" src="qris.jpg" alt="QRIS Pembayaran">
+
+    <p id="detail"></p>
+
+    <button class="pay" onclick="konfirmasiWA()">
+      KONFIRMASI VIA WHATSAPP
+    </button>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 ZAMQIS STORE
+  <p>Terima kasih sudah berbelanja!</p>
+</footer>
+
+<script>
+const produk = {
+  ML: [
+    {nama:"86 Diamond", jumlah:"86 Diamond", harga:20000},
+    {nama:"172 Diamond", jumlah:"172 Diamond", harga:39000},
+    {nama:"257 Diamond", jumlah:"257 Diamond", harga:58000},
+    {nama:"344 Diamond", jumlah:"344 Diamond", harga:77000},
+    {nama:"514 Diamond", jumlah:"514 Diamond", harga:115000}
+  ],
+
+  PUBG: [
+    {nama:"60 UC", jumlah:"60 UC", harga:15000},
+    {nama:"325 UC", jumlah:"325 UC", harga:75000},
+    {nama:"660 UC", jumlah:"660 UC", harga:145000},
+    {nama:"1800 UC", jumlah:"1800 UC", harga:370000}
+  ],
+
+  FF: [
+    {nama:"70 Diamond", jumlah:"70 Diamond", harga:10000},
+    {nama:"140 Diamond", jumlah:"140 Diamond", harga:20000},
+    {nama:"355 Diamond", jumlah:"355 Diamond", harga:50000},
+    {nama:"720 Diamond", jumlah:"720 Diamond", harga:100000},
+    {nama:"1450 Diamond", jumlah:"1450 Diamond", harga:200000}
+  ]
+};
+
+const namaGame = {
+  ML:"Mobile Legends",
+  PUBG:"PUBG Mobile",
+  FF:"Free Fire"
+};
+
+// GANTI DENGAN NOMOR WHATSAPP ADMIN
+const nomorWA = "6281234567890";
+
+// GANTI DENGAN GAMBAR QRIS MILIK TOKO
+// Simpan gambar dengan nama qris.jpg satu folder dengan index.html.
+
+let gameAktif = "ML";
+let produkDipilih = null;
+
+function rupiah(angka) {
+  return "Rp" + angka.toLocaleString("id-ID");
+}
+
+function pilihGame(game, tombol) {
+  gameAktif = game;
+  produkDipilih = null;
+
+  document.querySelectorAll(".game").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  tombol.classList.add("active");
+
+  document.getElementById("judul").innerText =
+    "Pilih Paket " + namaGame[game];
+
+  document.getElementById("payment").style.display = "none";
+
+  tampilProduk();
+  updatePesanan();
+}
+
+function tampilProduk() {
+  const tempat = document.getElementById("products");
+  tempat.innerHTML = "";
+
+  produk[gameAktif].forEach((item, index) => {
+    const card = document.createElement("div");
+
+    card.className = "product";
+
+    card.innerHTML = `
+      <h3>${item.nama}</h3>
+      <small>${item.jumlah}</small>
+      <p>${rupiah(item.harga)}</p>
+    `;
+
+    card.onclick = () => {
+      produkDipilih = item;
+
+      document.querySelectorAll(".product").forEach(p => {
+        p.classList.remove("active");
+      });
+
+      card.classList.add("active");
+      updatePesanan();
+    };
+
+    tempat.appendChild(card);
+  });
+}
+
+function updatePesanan() {
+  document.getElementById("pilihan").innerText =
+    "Produk: " + (produkDipilih ? produkDipilih.nama : "Belum dipilih");
+
+  document.getElementById("harga").innerText =
+    "Total: " + rupiah(produkDipilih ? produkDipilih.harga : 0);
+
+  document.getElementById("bayar").disabled = !produkDipilih;
+}
+
+function buatPesanan() {
+  const id = document.getElementById("idgame").value.trim();
+
+  if (!id) {
+    alert("Masukkan ID Game terlebih dahulu!");
+    return;
+  }
+
+  if (!produkDipilih) {
+    alert("Pilih produk terlebih dahulu!");
+    return;
+  }
+
+  document.getElementById("payment").style.display = "block";
+
+  document.getElementById("detail").innerText =
+    namaGame[gameAktif] + " | " +
+    produkDipilih.nama + " | " +
+    rupiah(produkDipilih.harga);
+
+  document.getElementById("payment").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function konfirmasiWA() {
+  const id = document.getElementById("idgame").value;
+  const zone = document.getElementById("zone").value || "-";
+  const nickname = document.getElementById("nickname").value || "-";
+
+  const pesan =
+    "Halo Admin ZAMQIS STORE, saya ingin konfirmasi pembayaran.%0A%0A" +
+    "Game: " + encodeURIComponent(namaGame[gameAktif]) + "%0A" +
+    "Produk: " + encodeURIComponent(produkDipilih.nama) + "%0A" +
+    "Harga: " + rupiah(produkDipilih.harga) + "%0A" +
+    "ID Game: " + encodeURIComponent(id) + "%0A" +
+    "Zone ID: " + encodeURIComponent(zone) + "%0A" +
+    "Nickname: " + encodeURIComponent(nickname) + "%0A%0A" +
+    "Saya akan mengirim bukti pembayaran.";
+
+  window.open("https://wa.me/" + nomorWA + "?text=" + pesan, "_blank");
+}
+
+tampilProduk();
+</script>
+
+</body>
+</html>
