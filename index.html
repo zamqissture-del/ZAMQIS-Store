@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZAMQIS STORE - Top Up Game</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080b18;color:white;font-family:Arial,sans-serif}
+header{padding:22px 15px;text-align:center;background:linear-gradient(120deg,#24105c,#071c48)}
+header h1{margin:0;color:#a78bfa;font-size:30px}
+header p{color:#cbd5e1;margin:8px 0}
+nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:14px;background:#10152a}
+button{cursor:pointer;border:0;border-radius:9px;padding:11px 15px;font-weight:bold}
+nav button,.game-btn{background:#252b48;color:white}
+button.active,.primary{background:#7c3aed;color:white}
+.container{max-width:1000px;margin:auto;padding:18px}
+h2{color:#c4b5fd}
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.game-btn{padding:17px 5px;border:1px solid #45416e;font-size:15px}
+.game-btn.active{background:#6d28d9}
+.panel{background:#11182c;border:1px solid #293454;border-radius:14px;padding:16px;margin:15px 0}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:12px}
+.product{background:#1a2340;border:1px solid #39446c;border-radius:12px;padding:14px;text-align:center}
+.product strong{display:block;margin:8px 0;color:#c4b5fd}
+.product button{width:100%;background:#7c3aed;color:white}
+input,select,textarea{width:100%;padding:12px;margin:7px 0 13px;background:#080f20;border:1px solid #44506f;color:white;border-radius:8px}
+label{font-size:14px;color:#cbd5e1}
+.primary{width:100%;font-size:16px}
+.green{background:#16a34a;color:white}
+.small{font-size:12px;color:#94a3b8}
+#admin{display:none}
+#qrisPreview{max-width:220px;display:block;margin:12px auto;border-radius:10px}
+.order{border-bottom:1px solid #34405c;padding:12px 0}
+footer{text-align:center;padding:25px;color:#94a3b8}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<header>
+<h1>⚡ ZAMQIS STORE</h1>
+<p>Top Up Game Murah, Cepat & Terpercaya</p>
+</header>
+
+<nav>
+<button onclick="showStore()">🏠 Beranda</button>
+<button onclick="showAdmin()">🔐 Admin</button>
+</nav>
+
+<main id="store" class="container">
+<h2>🎮 Pilih Game</h2>
+<div class="games">
+<button class="game-btn active" onclick="chooseGame('Mobile Legends',this)">Mobile Legends</button>
+<button class="game-btn" onclick="chooseGame('PUBG Mobile',this)">PUBG Mobile</button>
+<button class="game-btn" onclick="chooseGame('Free Fire',this)">Free Fire</button>
+</div>
+
+<section class="panel">
+<h2 id="gameTitle">Mobile Legends</h2>
+<p>Pilih paket top up yang kamu inginkan:</p>
+<div id="products" class="products"></div>
+</section>
+
+<section class="panel">
+<h2>📝 Data Pemesanan</h2>
+<form id="orderForm">
+<label>Nama pembeli</label>
+<input id="buyer" placeholder="Masukkan nama kamu" required>
+
+<label>ID Game</label>
+<input id="gameId" placeholder="Masukkan ID game" required>
+
+<div id="zoneBox">
+<label>Zone ID (Mobile Legends)</label>
+<input id="zoneId" placeholder="Masukkan Zone ID">
+</div>
+
+<label>Nickname game</label>
+<input id="nickname" placeholder="Masukkan nickname" required>
+
+<label>Paket pilihan</label>
+<input id="selectedProduct" placeholder="Pilih paket terlebih dahulu" readonly required>
+
+<label>Total pembayaran</label>
+<input id="selectedPrice" placeholder="Harga akan muncul otomatis" readonly required>
+
+<button class="primary" type="submit">Pesan Sekarang via WhatsApp</button>
+</form>
+</section>
+
+<section class="panel">
+<h2>💳 Pembayaran QRIS</h2>
+<p>Silakan scan QRIS berikut untuk melakukan pembayaran.</p>
+<img id="qrisDisplay" class="hidden" style="max-width:230px;width:100%;display:block;margin:auto;border-radius:10px">
+<p id="noQris" class="small">QRIS belum tersedia. Silakan hubungi admin.</p>
+</section>
+</main>
+
+<main id="admin" class="container">
+<section class="panel" id="loginBox">
+<h2>🔐 Login Admin</h2>
+<label>Password admin</label>
+<input type="password" id="adminPassword" placeholder="Masukkan password">
+<button class="primary" onclick="login()">Masuk Admin</button>
+<p class="small">Password awal: zamqis123. Segera ganti di kode sebelum website digunakan.</p>
+</section>
+
+<div id="adminPanel" class="hidden">
+<section class="panel">
+<h2>⚙️ Pengaturan Toko</h2>
+<label>Nomor WhatsApp admin (contoh: 6281234567890)</label>
+<input id="waNumber" placeholder="628xxxxxxxxxx">
+<button class="primary" onclick="saveSettings()">Simpan Nomor WhatsApp</button>
+</section>
+
+<section class="panel">
+<h2>➕ Tambah Produk</h2>
+<label>Nama game</label>
+<select id="newGame">
+<option>Mobile Legends</option>
+<option>PUBG Mobile</option>
+<option>Free Fire</option>
+</select>
+<label>Nama paket</label>
+<input id="newName" placeholder="Contoh: 86 Diamonds">
+<label>Harga (angka saja)</label>
+<input id="newPrice" type="number" placeholder="Contoh: 20000">
+<button class="primary" onclick="addProduct()">Tambah Produk</button>
+</section>
+
+<section class="panel">
+<h2>📦 Daftar Produk</h2>
+<div id="adminProducts"></div>
+</section>
+
+<section class="panel">
+<h2>🖼️ Upload QRIS</h2>
+<input type="file" id="qrisFile" accept="image/*">
+<button class="primary" onclick="uploadQris()">Simpan Gambar QRIS</button>
+<button class="green" onclick="removeQris()">Hapus QRIS</button>
+<img id="qrisPreview" class="hidden">
+</section>
+
+<section class="panel">
+<h2>📋 Riwayat Pesanan</h2>
+<div id="orders"></div>
+<button class="green" onclick="clearOrders()">Hapus Semua Riwayat</button>
+</section>
+
+<button class="primary" onclick="logout()">Keluar Admin</button>
+</div>
+</main>
+
+<footer>
+© 2026 ZAMQIS STORE · Terima kasih sudah berbelanja ❤️
+</footer>
+
+<script>
+// GANTI PASSWORD ADMIN DI BAGIAN INI
+const ADMIN_PASSWORD = "zamqis123";
+
+// GANTI NOMOR INI DENGAN NOMOR WHATSAPP ADMIN
+const DEFAULT_WA = "6281234567890";
+
+const defaultProducts = [
+{game:"Mobile Legends",name:"86 Diamonds",price:20000},
+{game:"Mobile Legends",name:"172 Diamonds",price:39000},
+{game:"Mobile Legends",name:"257 Diamonds",price:58000},
+{game:"PUBG Mobile",name:"60 UC",price:15000},
+{game:"PUBG Mobile",name:"325 UC",price:75000},
+{game:"PUBG Mobile",name:"660 UC",price:145000},
+{game:"Free Fire",name:"70 Diamonds",price:10000},
+{game:"Free Fire",name:"140 Diamonds",price:20000},
+{game:"Free Fire",name:"355 Diamonds",price:48000}
+];
+
+function getData(key, fallback){
+ try{
+  const value=localStorage.getItem(key);
+  return value===null?fallback:JSON.parse(value);
+ }catch(e){return fallback}
+}
+function saveData(key,value){
+ localStorage.setItem(key,JSON.stringify(value));
+}
+
+let products=getData("zamqis_products",defaultProducts);
+let selectedGame="Mobile Legends";
+let selected=null;
+let waNumber=localStorage.getItem("zamqis_wa")||DEFAULT_WA;
+
+function rupiah(n){
+ return "Rp"+Number(n).toLocaleString("id-ID");
+}
+
+function chooseGame(game,btn){
+ selectedGame=game;
+ selected=null;
+ document.querySelectorAll(".game-btn").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ document.getElementById("gameTitle").textContent=game;
+ document.getElementById("zoneBox").style.display=game==="Mobile Legends"?"block":"none";
+ document.getElementById("selectedProduct").value="";
+ document.getElementById("selectedPrice").value="";
+ renderProducts();
+}
+
+function renderProducts(){
+ const area=document.getElementById("products");
+ area.innerHTML="";
+ products.filter(p=>p.game===selectedGame).forEach((p)=>{
+  const div=document.createElement("div");
+  div.className="product";
+  const name=document.createElement("strong");
+  name.textContent=p.name;
+  const price=document.createElement("p");
+  price.textContent=rupiah(p.price);
+  const btn=document.createElement("button");
+  btn.textContent="Pilih Paket";
+  btn.onclick=()=>{
+   selected=p;
+   document.getElementById("selectedProduct").value=p.name;
+   document.getElementById("selectedPrice").value=rupiah(p.price);
+   document.querySelector(".panel form").scrollIntoView({behavior:"smooth"});
+  };
+  div.append(name,price,btn);
+  area.appendChild(div);
+ });
+ if(!area.children.length)area.textContent="Belum ada produk untuk game ini.";
+}
+
+document.getElementById("orderForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ if(!selected)return alert("Silakan pilih paket terlebih dahulu.");
+
+ const buyer=document.getElementById("buyer").value.trim();
+ const id=document.getElementById("gameId").value.trim();
+ const zone=document.getElementById("zoneId").value.trim();
+ const nick=document.getElementById("nickname").value.trim();
+
+ const order={
+  buyer,id,zone,nick,game:selectedGame,
+  product:selected.name,price:selected.price,
+  date:new Date().toLocaleString("id-ID")
+ };
+
+ const orders=getData("zamqis_orders",[]);
+ orders.unshift(order);
+ saveData("zamqis_orders",orders);
+
+ const message=
+`HALO ADMIN ZAMQIS STORE!
+Nama: ${buyer}
+Game: ${selectedGame}
+ID Game: ${id}
+Zone ID: ${selectedGame==="Mobile Legends"?zone:"-"}
+Nickname: ${nick}
+Paket: ${selected.name}
+Total: ${rupiah(selected.price)}
+
+Saya sudah melakukan pemesanan. Mohon konfirmasi pembayaran saya.`;
+
+ window.open("https://wa.me/"+waNumber+"?text="+encodeURIComponent(message),"_blank");
+});
+
+function showStore(){
+ document.getElementById("store").style.display="block";
+ document.getElementById("admin").style.display="none";
+}
+function showAdmin(){
+ document.getElementById("store").style.display="none";
+ document.getElementById("admin").style.display="block";
+}
+function login(){
+ if(document.getElementById("adminPassword").value===ADMIN_PASSWORD){
+  document.getElementById("loginBox").style.display="none";
+  document.getElementById("adminPanel").classList.remove("hidden");
+  renderAdmin();
+ }else alert("Password salah!");
+}
+function logout(){
+ document.getElementById("adminPanel").classList.add("hidden");
+ document.getElementById("loginBox").style.display="block";
+ document.getElementById("adminPassword").value="";
+}
+function saveSettings(){
+ waNumber=document.getElementById("waNumber").value.replace(/\D/g,"");
+ if(!waNumber)return alert("Masukkan nomor WhatsApp!");
+ localStorage.setItem("zamqis_wa",waNumber);
+ alert("Nomor WhatsApp berhasil disimpan.");
+}
+function addProduct(){
+ const game=document.getElementById("newGame").value;
+ const name=document.getElementById("newName").value.trim();
+ const price=Number(document.getElementById("newPrice").value);
+ if(!name||!price||price<1)return alert("Isi nama dan harga dengan benar.");
+ products.push({game,name,price});
+ saveData("zamqis_products",products);
+ document.getElementById("newName").value="";
+ document.getElementById("newPrice").value="";
+ renderAdmin();
+ renderProducts();
+ alert("Produk berhasil ditambahkan!");
+}
+function renderAdmin(){
+ document.getElementById("waNumber").value=waNumber;
+ const area=document.getElementById("adminProducts");
+ area.innerHTML="";
+ products.forEach((p,i)=>{
+  const div=document.createElement("div");
+  div.className="order";
+  const info=document.createElement("p");
+  info.textContent=p.game+" - "+p.name+" - "+rupiah(p.price);
+  const del=document.createElement("button");
+  del.textContent="Hapus";
+  del.style.background="#991b1b";
+  del.style.color="white";
+  del.onclick=()=>{
+   if(confirm("Hapus produk ini?")){
+    products.splice(i,1);
+    saveData("zamqis_products",products);
+    renderAdmin();renderProducts();
+   }
+  };
+  div.append(info,del);
+  area.append(div);
+ });
+ const orders=getData("zamqis_orders",[]);
+ const orderArea=document.getElementById("orders");
+ orderArea.innerHTML="";
+ if(!orders.length)orderArea.textContent="Belum ada pesanan.";
+ orders.forEach(o=>{
+  const div=document.createElement("div");
+  div.className="order";
+  const info=document.createElement("p");
+  info.textContent=o.date+" | "+o.buyer+" | "+o.game+" | "+o.product+" | "+rupiah(o.price);
+  div.append(info);
+  orderArea.append(div);
+ });
+ const qris=localStorage.getItem("zamqis_qris");
+ const preview=document.getElementById("qrisPreview");
+ if(qris){preview.src=qris;preview.classList.remove("hidden")}
+}
+function uploadQris(){
+ const file=document.getElementById("qrisFile").files[0];
+ if(!file)return alert("Pilih gambar QRIS dahulu.");
+ if(file.size>700000)return alert("Ukuran gambar maksimal 700 KB. Kompres gambar dahulu.");
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   localStorage.setItem("zamqis_qris",reader.result);
+   renderQris();
+   renderAdmin();
+   alert("QRIS berhasil disimpan.");
+  }catch(e){alert("Penyimpanan penuh. Gunakan gambar lebih kecil.")}
+ };
+ reader.readAsDataURL(file);
+}
+function renderQris(){
+ const qris=localStorage.getItem("zamqis_qris");
+ const img=document.getElementById("qrisDisplay");
+ const no=document.getElementById("noQris");
+ if(qris){img.src=qris;img.classList.remove("hidden");img.style.display="block";no.style.display="none"}
+ else{img.classList.add("hidden");img.style.display="none";no.style.display="block"}
+}
+function removeQris(){
+ if(confirm("Hapus gambar QRIS?")){
+  localStorage.removeItem("zamqis_qris");
+  renderQris();renderAdmin();
+ }
+}
+function clearOrders(){
+ if(confirm("Hapus semua riwayat pesanan?")){
+  localStorage.removeItem("zamqis_orders");
+  renderAdmin();
+ }
+}
+
+renderProducts();
+renderQris();
+</script>
+</body>
+</html>
