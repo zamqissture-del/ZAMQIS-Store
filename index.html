@@ -4,72 +4,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ZAMQIS STORE</title>
+<title>ZAMQIS STORE | Top Up Game</title>
 <style>
+:root{--bg:#090817;--panel:#17142d;--purple:#9b5cff;--cyan:#43e8ff;--muted:#aaa6c7}
 *{box-sizing:border-box}
-body{
- margin:0;background:#090817;color:#fff;
- font-family:Arial,sans-serif
-}
-header{
- padding:18px 6%;display:flex;
- justify-content:space-between;align-items:center;
- background:#100d25;border-bottom:1px solid #39265e
-}
-.logo{font-size:22px;font-weight:bold;letter-spacing:2px}
-.logo span{color:#43e8ff}
+body{margin:0;background:radial-gradient(ellipse at 15% 0%,#28164d,transparent 45%),var(--bg);color:#fff;font:16px/1.55 Arial,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:17px 5%;background:#090817ee;border-bottom:1px solid #ffffff20;position:sticky;top:0;z-index:5}
+.logo{font-weight:900;letter-spacing:2px;font-size:22px}.logo span{color:var(--cyan)}
 a{color:#fff;text-decoration:none}
-main{max-width:1000px;margin:auto;padding:25px 18px}
-.hero{
- padding:40px 25px;border-radius:20px;
- background:linear-gradient(120deg,#35145e,#101c3c);
- border:1px solid #7650b4
-}
-.hero h1{font-size:40px;margin:10px 0}
-.hero p{color:#c7c2e5}
+main{max-width:1050px;margin:auto;padding:25px 18px 50px}
+.hero{padding:clamp(25px,6vw,50px);border:1px solid #6742a1;border-radius:22px;background:linear-gradient(120deg,#30134f,#111b3a)}
+.hero h1{font-size:clamp(34px,7vw,58px);line-height:1.05;margin:12px 0}
+.hero p{color:#c9c3e5;max-width:550px}
+.eyebrow{color:var(--cyan);font-weight:bold;letter-spacing:2px;font-size:12px}
 h2{margin-top:30px}
-.games,.packages{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
- gap:12px
-}
-.card{
- padding:18px;background:#17142d;
- border:1px solid #393052;border-radius:14px;
- cursor:pointer
-}
-.card.active{border-color:#43e8ff;box-shadow:0 0 15px #43e8ff22}
-.card strong{display:block;margin-bottom:8px}
-.card small{color:#43e8ff}
-label{display:block;color:#bcb7d5;font-size:13px;margin:12px 0 6px}
-input{
- width:100%;padding:13px;border-radius:10px;
- background:#100d23;border:1px solid #393052;color:white
-}
-button{
- padding:13px 18px;border:0;border-radius:10px;
- color:white;background:linear-gradient(100deg,#9b5cff,#526eff);
- font-weight:bold;cursor:pointer
-}
-.summary{
- margin-top:18px;padding:20px;
- background:#17142d;border:1px solid #6943a3;border-radius:15px
-}
-.total{font-size:28px;color:#43e8ff;font-weight:bold}
+.games,.packages{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.card{padding:17px;background:var(--panel);border:1px solid #393052;border-radius:14px;cursor:pointer;transition:.2s}
+.card.active,.card:hover{border-color:var(--cyan);box-shadow:0 0 18px #43e8ff20}
+.card strong{display:block;margin-bottom:7px}.card small{color:var(--cyan)}
+label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}
+input{width:100%;padding:13px;border-radius:10px;background:#100d23;border:1px solid #393052;color:white}
+button,.btn{padding:13px 18px;border:0;border-radius:10px;color:white;background:linear-gradient(100deg,var(--purple),#526eff);font-weight:bold;cursor:pointer}
+.summary{margin-top:18px;padding:20px;background:var(--panel);border:1px solid #6943a3;border-radius:15px}
+.total{font-size:28px;color:var(--cyan);font-weight:bold}
+.qris{width:100%;max-width:240px;background:white;padding:8px;border-radius:12px;display:block;margin:12px auto}
+.muted{color:var(--muted);font-size:13px}
 footer{text-align:center;color:#999;padding:25px}
+@media(max-width:550px){header{padding:14px}.logo{font-size:18px}}
 </style>
 </head>
 <body>
 
 <header>
- <div class="logo">ZAMQIS<span> STORE</span></div>
+ <a class="logo" href="#">ZAMQIS<span> STORE</span></a>
  <a href="admin.html">ADMIN ↗</a>
 </header>
 
 <main>
 <section class="hero">
- <small style="color:#43e8ff">TOP UP GAME • CEPAT • AMAN</small>
+ <div class="eyebrow">TOP UP GAME • CEPAT • AMAN</div>
  <h1>POWER UP<br>YOUR GAME.</h1>
- <p>Top up game favoritmu dengan mudah di ZAMQIS STORE.</p>
+ <p>Top up game favoritmu dengan mudah. Pilih game, tentukan paket, lalu kirim pesanan ke WhatsApp admin.</p>
+ <a class="btn" href="#order">Mulai Top Up ↓</a>
 </section>
 
 <h2>🎮 Pilih Game</h2>
@@ -78,7 +54,7 @@ footer{text-align:center;color:#999;padding:25px}
 <h2>💎 Pilih Paket</h2>
 <div class="packages" id="packages"></div>
 
-<h2>🧾 Data Pesanan</h2>
+<h2 id="order">🧾 Detail Pesanan</h2>
 <label>ID Player</label>
 <input id="player" placeholder="Masukkan ID Player">
 
@@ -89,10 +65,18 @@ footer{text-align:center;color:#999;padding:25px}
 <input id="buyer" placeholder="Nama kamu">
 
 <div class="summary">
- <div>Total Pembayaran</div>
+ <div class="muted">Total Pembayaran</div>
  <div class="total" id="total">Rp0</div>
- <p style="color:#aaa">Klik tombol berikut untuk mengirim pesanan ke WhatsApp admin.</p>
- <button onclick="order()">PESAN VIA WHATSAPP ↗</button>
+ <p class="muted">Kirim pesanan melalui WhatsApp admin untuk konfirmasi.</p>
+ <button onclick="orderNow()">PESAN VIA WHATSAPP ↗</button>
+</div>
+
+<div class="summary">
+ <h3>📱 Pembayaran QRIS</h3>
+ <p class="muted">Scan QRIS admin untuk melakukan pembayaran.</p>
+ <img id="qrisDisplay" class="qris" alt="QRIS belum diatur admin" style="display:none">
+ <p id="qrisMessage" class="muted">QRIS belum diatur oleh admin.</p>
+ <p class="muted">Pastikan nominal pembayaran sesuai pesanan.</p>
 </div>
 </main>
 
@@ -100,54 +84,41 @@ footer{text-align:center;color:#999;padding:25px}
 
 <script>
 const defaultPrices={
- "Free Fire":[
-  ["70 Diamond",10000],
-  ["140 Diamond",19000],
-  ["355 Diamond",47000],
-  ["720 Diamond",92000]
- ],
- "PUBG Mobile":[
-  ["60 UC",15000],
-  ["325 UC",75000],
-  ["660 UC",145000]
- ],
- "Mobile Legends":[
-  ["86 Diamond",20000],
-  ["172 Diamond",39000],
-  ["257 Diamond",58000]
- ]
+ "Free Fire":[["70 Diamond",10000],["140 Diamond",19000],["355 Diamond",47000],["720 Diamond",92000]],
+ "PUBG Mobile":[["60 UC",15000],["325 UC",75000],["660 UC",145000]],
+ "Mobile Legends":[["86 Diamond",20000],["172 Diamond",39000],["257 Diamond",58000]]
 };
 
-let prices;
-try{
- prices=JSON.parse(localStorage.getItem("zamqisPrices"))||defaultPrices;
-}catch(e){prices=defaultPrices}
-
+let prices={};
 let game="Free Fire";
 let selected=0;
 
+function getPrices(){
+ try{
+  return JSON.parse(localStorage.getItem("zamqisPrices"))||defaultPrices;
+ }catch(e){return defaultPrices}
+}
+
 function rupiah(n){
- return "Rp"+Number(n).toLocaleString("id-ID");
+ return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
 }
 
 function renderGames(){
  document.getElementById("games").innerHTML=
  Object.keys(prices).map(g=>`
  <div class="card ${g===game?'active':''}" onclick="selectGame('${g}')">
-  <strong>${g}</strong>
-  <small>Pilih Game →</small>
+  <strong>${g}</strong><small>Pilih Game →</small>
  </div>`).join("");
 }
 
 function renderPackages(){
- let list=prices[game]||[];
+ const list=prices[game]||[];
  selected=0;
 
  document.getElementById("packages").innerHTML=
  list.map((p,i)=>`
  <div class="card ${i===0?'active':''}" onclick="selectPackage(${i})">
-  <strong>${p[0]}</strong>
-  <small>${rupiah(p[1])}</small>
+  <strong>${p[0]}</strong><small>${rupiah(p[1])}</small>
  </div>`).join("");
 
  document.getElementById("total").textContent=
@@ -169,7 +140,21 @@ function selectPackage(i){
  rupiah(prices[game][i][1]);
 }
 
-function order(){
+function loadSettings(){
+ const qris=localStorage.getItem("zamqisQRIS");
+ const img=document.getElementById("qrisDisplay");
+
+ if(qris){
+  img.src=qris;
+  img.style.display="block";
+  document.getElementById("qrisMessage").style.display="none";
+ }else{
+  img.style.display="none";
+  document.getElementById("qrisMessage").style.display="block";
+ }
+}
+
+function orderNow(){
  const player=document.getElementById("player").value.trim();
  const server=document.getElementById("server").value.trim();
  const buyer=document.getElementById("buyer").value.trim();
@@ -179,25 +164,38 @@ function order(){
   return;
  }
 
+ if(!prices[game]||!prices[game][selected]){
+  alert("Pilih paket terlebih dahulu.");
+  return;
+ }
+
  const p=prices[game][selected];
+ const admin=(localStorage.getItem("zamqisWA")||"6281234567890").replace(/\D/g,"");
 
  const message=
- `Halo Admin ZAMQIS STORE, saya ingin top up.%0A%0A`+
- `Game: ${game}%0A`+
- `Paket: ${p[0]}%0A`+
- `ID Player: ${player}%0A`+
- `Server: ${server||"-"}%0A`+
- `Nama: ${buyer}%0A`+
- `Total: ${rupiah(p[1])}`;
+ `Halo Admin ZAMQIS STORE, saya ingin top up.\n\n`+
+ `Game: ${game}\nPaket: ${p[0]}\n`+
+ `ID Player: ${player}\nServer: ${server||"-"}\n`+
+ `Nama: ${buyer}\nTotal: ${rupiah(p[1])}`;
 
- // GANTI NOMOR DI BAWAH DENGAN NOMOR WHATSAPP ADMIN
- const admin="6281234567890";
-
- window.open("https://wa.me/"+admin+"?text="+message,"_blank");
+ window.open("https://wa.me/"+admin+"?text="+encodeURIComponent(message),"_blank");
 }
 
-renderGames();
-renderPackages();
+function init(){
+ prices=getPrices();
+ if(!prices[game])game=Object.keys(prices)[0];
+ renderGames();
+ renderPackages();
+ loadSettings();
+}
+
+window.addEventListener("storage",function(e){
+ if(e.key==="zamqisPrices"||e.key==="zamqisWA"||e.key==="zamqisQRIS"){
+  init();
+ }
+});
+
+init();
 </script>
 </body>
 </html>
