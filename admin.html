@@ -4,69 +4,75 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin ZAMQIS STORE</title>
+<title>ZAMQIS STORE | Admin</title>
 <style>
+:root{--bg:#090817;--panel:#17142d;--purple:#9b5cff;--cyan:#43e8ff;--muted:#aaa6c7}
 *{box-sizing:border-box}
-body{
- margin:0;background:#090817;color:white;
- font-family:Arial,sans-serif
-}
-header{
- padding:18px 5%;background:#100d25;
- display:flex;justify-content:space-between;
- border-bottom:1px solid #39265e
-}
-.logo{font-weight:bold;letter-spacing:2px}
-.logo span{color:#43e8ff}
-a{color:#fff;text-decoration:none}
-main{max-width:850px;margin:auto;padding:25px 18px}
-.panel{
- padding:22px;margin:20px 0;
- background:#17142d;border:1px solid #6943a3;
- border-radius:16px
-}
-label{display:block;color:#aaa;font-size:13px;margin:12px 0 6px}
-input,select{
- width:100%;padding:12px;border-radius:9px;
- background:#100d23;border:1px solid #393052;color:white
-}
-button{
- padding:11px 15px;border:0;border-radius:9px;
- background:linear-gradient(100deg,#9b5cff,#526eff);
- color:white;font-weight:bold;cursor:pointer
-}
-.delete{background:#812e4a}
+body{margin:0;background:var(--bg);color:white;font:16px/1.5 Arial,sans-serif}
+header{padding:18px 5%;background:#100d25;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff20}
+.logo{font-weight:900;letter-spacing:2px;font-size:21px}.logo span{color:var(--cyan)}
+a{color:white;text-decoration:none}
+main{max-width:900px;margin:auto;padding:25px 18px}
+.panel{padding:22px;margin:18px 0;background:var(--panel);border:1px solid #6943a3;border-radius:16px}
+label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}
+input,select{width:100%;padding:12px;background:#100d23;border:1px solid #393052;border-radius:10px;color:white}
+button{padding:11px 15px;border:0;border-radius:9px;background:linear-gradient(100deg,var(--purple),#526eff);color:white;font-weight:bold;cursor:pointer}
+.danger{background:#812e4a}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.item{
- display:flex;justify-content:space-between;
- align-items:center;gap:10px;
- padding:12px;border:1px solid #393052;
- border-radius:10px;margin:10px 0
-}
-.notice{
- background:#28203f;padding:13px;
- border-radius:10px;color:#d4c6ff;font-size:14px
-}
-@media(max-width:550px){.row{grid-template-columns:1fr}}
+.item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border:1px solid #393052;border-radius:10px;margin:10px 0}
+.notice{background:#28203f;padding:13px;border-radius:10px;color:#d4c6ff;font-size:14px}
+.qris{max-width:220px;width:100%;display:block;background:white;padding:8px;border-radius:12px;margin:15px 0}
+@media(max-width:550px){.row{grid-template-columns:1fr}header{padding:14px}.logo{font-size:18px}}
 </style>
 </head>
 <body>
 
+<!-- LOGIN ADMIN -->
+<div id="loginPage" style="position:fixed;inset:0;z-index:9999;background:#090817;display:flex;align-items:center;justify-content:center;padding:20px">
+ <div style="background:#17142d;padding:28px;border:1px solid #6943a3;border-radius:18px;width:100%;max-width:360px">
+  <h2 style="text-align:center">ZAMQIS ADMIN</h2>
+  <p style="text-align:center;color:#aaa6c7">Login untuk mengelola toko</p>
+
+  <label>Username</label>
+  <input id="username" placeholder="Username">
+
+  <label>Password</label>
+  <input id="password" type="password" placeholder="Password">
+
+  <button onclick="loginAdmin()" style="width:100%;margin-top:15px">LOGIN ADMIN</button>
+  <p id="error" style="color:#ff6688;text-align:center"></p>
+ </div>
+</div>
+
 <header>
- <div class="logo">ZAMQIS<span> ADMIN</span></div>
+ <a class="logo" href="index.html">ZAMQIS<span> ADMIN</span></a>
  <a href="index.html">Website Pembeli ↗</a>
 </header>
 
 <main>
 <h1>Admin Dashboard</h1>
-<p style="color:#aaa">Kelola paket top up ZAMQIS STORE.</p>
+<p style="color:#aaa6c7">Kelola paket, nomor WhatsApp, dan QRIS toko.</p>
 
 <div class="notice">
-Penting: versi ini menyimpan harga di browser admin. Supaya perubahan harga tersinkron ke semua pengunjung, perlu database/backend.
+Versi GitHub Pages ini menyimpan pengaturan pada browser. Pengaturan tidak otomatis tersinkron ke browser pelanggan lain. Password HTML juga bukan autentikasi yang aman untuk toko sungguhan.
 </div>
 
 <section class="panel">
-<h2>Tambah Paket</h2>
+<h2>⚙️ Pengaturan Pembayaran</h2>
+
+<label>Nomor WhatsApp Admin</label>
+<input id="waNumber" placeholder="Contoh: 6281234567890">
+
+<label>QRIS Pembayaran</label>
+<input id="qrisImage" type="file" accept="image/*">
+
+<img id="qrisPreview" class="qris" style="display:none" alt="Preview QRIS">
+
+<button onclick="saveSettings()">SIMPAN PENGATURAN</button>
+</section>
+
+<section class="panel">
+<h2>💎 Tambah Paket</h2>
 
 <label>Game</label>
 <select id="game">
@@ -82,23 +88,23 @@ Penting: versi ini menyimpan harga di browser admin. Supaya perubahan harga ters
  </div>
  <div>
   <label>Harga (Rupiah)</label>
-  <input id="price" type="number" placeholder="19000">
+  <input id="price" type="number" min="1" placeholder="19000">
  </div>
 </div>
 
 <br>
 <button onclick="addPackage()">SIMPAN PAKET</button>
-<button class="delete" onclick="resetPrices()">RESET HARGA</button>
+<button class="danger" onclick="resetPrices()">RESET HARGA AWAL</button>
 </section>
 
 <section class="panel">
-<h2>Daftar Paket</h2>
+<h2>📋 Daftar Paket</h2>
 <div id="list"></div>
 </section>
 </main>
 
 <script>
-const defaults={
+const DEFAULTS={
  "Free Fire":[
   ["70 Diamond",10000],
   ["140 Diamond",19000],
@@ -117,13 +123,27 @@ const defaults={
  ]
 };
 
+const ADMIN_USER="admin";
+const ADMIN_PASS="Zamqis#2026";
+
+function loginAdmin(){
+ const u=document.getElementById("username").value;
+ const p=document.getElementById("password").value;
+
+ if(u===ADMIN_USER&&p===ADMIN_PASS){
+  document.getElementById("loginPage").style.display="none";
+  loadSettings();
+  showPackages();
+ }else{
+  document.getElementById("error").textContent="Username atau password salah!";
+ }
+}
+
 function getPrices(){
  try{
   return JSON.parse(localStorage.getItem("zamqisPrices"))||
-  JSON.parse(JSON.stringify(defaults));
- }catch(e){
-  return JSON.parse(JSON.stringify(defaults));
- }
+   JSON.parse(JSON.stringify(DEFAULTS));
+ }catch(e){return JSON.parse(JSON.stringify(DEFAULTS))}
 }
 
 function savePrices(data){
@@ -173,15 +193,12 @@ function showPackages(){
       Rp${Number(p[1]).toLocaleString("id-ID")}
      </small>
     </span>
-    <button class="delete"
-     onclick="deletePackage('${game}',${i})">
-     HAPUS
-    </button>
+    <button class="danger" onclick="deletePackage('${game}',${i})">HAPUS</button>
    </div>`;
   });
  });
 
- document.getElementById("list").innerHTML=html;
+ document.getElementById("list").innerHTML=html||"Belum ada paket.";
 }
 
 function resetPrices(){
@@ -191,6 +208,68 @@ function resetPrices(){
  }
 }
 
+function loadSettings(){
+ document.getElementById("waNumber").value=
+  localStorage.getItem("zamqisWA")||"6281234567890";
+
+ const qris=localStorage.getItem("zamqisQRIS");
+
+ if(qris){
+  document.getElementById("qrisPreview").src=qris;
+  document.getElementById("qrisPreview").style.display="block";
+ }
+}
+
+document.getElementById("qrisImage").addEventListener("change",function(){
+ const file=this.files[0];
+ if(!file)return;
+
+ if(file.size>700000){
+  alert("Ukuran gambar terlalu besar. Gunakan gambar QRIS di bawah 700 KB.");
+  this.value="";
+  return;
+ }
+
+ const reader=new FileReader();
+
+ reader.onload=function(e){
+  document.getElementById("qrisPreview").src=e.target.result;
+  document.getElementById("qrisPreview").style.display="block";
+ };
+
+ reader.readAsDataURL(file);
+});
+
+function saveSettings(){
+ const wa=document.getElementById("waNumber").value.trim();
+ const image=document.getElementById("qrisImage").files[0];
+
+ if(!wa){
+  alert("Nomor WhatsApp harus diisi.");
+  return;
+ }
+
+ localStorage.setItem("zamqisWA",wa.replace(/\D/g,""));
+
+ if(image){
+  const reader=new FileReader();
+
+  reader.onload=function(e){
+   try{
+    localStorage.setItem("zamqisQRIS",e.target.result);
+    alert("Nomor WhatsApp dan QRIS berhasil disimpan.");
+   }catch(err){
+    alert("Gagal menyimpan gambar. Coba gambar yang lebih kecil.");
+   }
+  };
+
+  reader.readAsDataURL(image);
+ }else{
+  alert("Nomor WhatsApp berhasil disimpan.");
+ }
+}
+
+loadSettings();
 showPackages();
 </script>
 </body>
