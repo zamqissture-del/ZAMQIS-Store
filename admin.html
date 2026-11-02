@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin ZAMQIS STORE</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090817;color:white;
+ font-family:Arial,sans-serif
+}
+header{
+ padding:18px 5%;background:#100d25;
+ display:flex;justify-content:space-between;
+ border-bottom:1px solid #39265e
+}
+.logo{font-weight:bold;letter-spacing:2px}
+.logo span{color:#43e8ff}
+a{color:#fff;text-decoration:none}
+main{max-width:850px;margin:auto;padding:25px 18px}
+.panel{
+ padding:22px;margin:20px 0;
+ background:#17142d;border:1px solid #6943a3;
+ border-radius:16px
+}
+label{display:block;color:#aaa;font-size:13px;margin:12px 0 6px}
+input,select{
+ width:100%;padding:12px;border-radius:9px;
+ background:#100d23;border:1px solid #393052;color:white
+}
+button{
+ padding:11px 15px;border:0;border-radius:9px;
+ background:linear-gradient(100deg,#9b5cff,#526eff);
+ color:white;font-weight:bold;cursor:pointer
+}
+.delete{background:#812e4a}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.item{
+ display:flex;justify-content:space-between;
+ align-items:center;gap:10px;
+ padding:12px;border:1px solid #393052;
+ border-radius:10px;margin:10px 0
+}
+.notice{
+ background:#28203f;padding:13px;
+ border-radius:10px;color:#d4c6ff;font-size:14px
+}
+@media(max-width:550px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">ZAMQIS<span> ADMIN</span></div>
+ <a href="index.html">Website Pembeli ↗</a>
+</header>
+
+<main>
+<h1>Admin Dashboard</h1>
+<p style="color:#aaa">Kelola paket top up ZAMQIS STORE.</p>
+
+<div class="notice">
+Penting: versi ini menyimpan harga di browser admin. Supaya perubahan harga tersinkron ke semua pengunjung, perlu database/backend.
+</div>
+
+<section class="panel">
+<h2>Tambah Paket</h2>
+
+<label>Game</label>
+<select id="game">
+ <option>Free Fire</option>
+ <option>PUBG Mobile</option>
+ <option>Mobile Legends</option>
+</select>
+
+<div class="row">
+ <div>
+  <label>Nama Paket</label>
+  <input id="name" placeholder="Contoh: 140 Diamond">
+ </div>
+ <div>
+  <label>Harga (Rupiah)</label>
+  <input id="price" type="number" placeholder="19000">
+ </div>
+</div>
+
+<br>
+<button onclick="addPackage()">SIMPAN PAKET</button>
+<button class="delete" onclick="resetPrices()">RESET HARGA</button>
+</section>
+
+<section class="panel">
+<h2>Daftar Paket</h2>
+<div id="list"></div>
+</section>
+</main>
+
+<script>
+const defaults={
+ "Free Fire":[
+  ["70 Diamond",10000],
+  ["140 Diamond",19000],
+  ["355 Diamond",47000],
+  ["720 Diamond",92000]
+ ],
+ "PUBG Mobile":[
+  ["60 UC",15000],
+  ["325 UC",75000],
+  ["660 UC",145000]
+ ],
+ "Mobile Legends":[
+  ["86 Diamond",20000],
+  ["172 Diamond",39000],
+  ["257 Diamond",58000]
+ ]
+};
+
+function getPrices(){
+ try{
+  return JSON.parse(localStorage.getItem("zamqisPrices"))||
+  JSON.parse(JSON.stringify(defaults));
+ }catch(e){
+  return JSON.parse(JSON.stringify(defaults));
+ }
+}
+
+function savePrices(data){
+ localStorage.setItem("zamqisPrices",JSON.stringify(data));
+ showPackages();
+}
+
+function addPackage(){
+ const game=document.getElementById("game").value;
+ const name=document.getElementById("name").value.trim();
+ const price=Number(document.getElementById("price").value);
+
+ if(!name||price<=0){
+  alert("Isi nama paket dan harga dengan benar.");
+  return;
+ }
+
+ const data=getPrices();
+ data[game]=data[game]||[];
+ data[game].push([name,price]);
+
+ savePrices(data);
+
+ document.getElementById("name").value="";
+ document.getElementById("price").value="";
+}
+
+function deletePackage(game,index){
+ const data=getPrices();
+ data[game].splice(index,1);
+ savePrices(data);
+}
+
+function showPackages(){
+ const data=getPrices();
+ let html="";
+
+ Object.keys(data).forEach(game=>{
+  html+=`<h3>${game}</h3>`;
+
+  data[game].forEach((p,i)=>{
+   html+=`
+   <div class="item">
+    <span>
+     ${p[0]}<br>
+     <small style="color:#43e8ff">
+      Rp${Number(p[1]).toLocaleString("id-ID")}
+     </small>
+    </span>
+    <button class="delete"
+     onclick="deletePackage('${game}',${i})">
+     HAPUS
+    </button>
+   </div>`;
+  });
+ });
+
+ document.getElementById("list").innerHTML=html;
+}
+
+function resetPrices(){
+ if(confirm("Kembalikan harga ke harga awal?")){
+  localStorage.removeItem("zamqisPrices");
+  showPackages();
+ }
+}
+
+showPackages();
+</script>
+</body>
+</html>
