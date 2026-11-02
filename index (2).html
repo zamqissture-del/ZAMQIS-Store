@@ -1,0 +1,567 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin ZAMQIS STORE</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #080d1b;
+  color: white;
+}
+
+header {
+  background: #14223a;
+  padding: 20px;
+  border-bottom: 2px solid #36e0d0;
+}
+
+header h2 {
+  color: #36e0d0;
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+.box {
+  background: #14223a;
+  border: 1px solid #304461;
+  border-radius: 13px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  margin-bottom: 15px;
+  color: #36e0d0;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 7px 0 14px;
+  background: #091322;
+  color: white;
+  border: 1px solid #40516d;
+  border-radius: 8px;
+}
+
+label {
+  font-size: 13px;
+  color: #c5d2e5;
+}
+
+button {
+  padding: 11px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.primary {
+  background: #36e0d0;
+  color: #07151b;
+  width: 100%;
+}
+
+.danger {
+  background: #e74c3c;
+  color: white;
+}
+
+.edit {
+  background: #e6a23c;
+  color: #111;
+}
+
+.product {
+  background: #0b1729;
+  border: 1px solid #304461;
+  border-radius: 10px;
+  padding: 13px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.product img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-info p {
+  color: #36e0d0;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.actions {
+  display: flex;
+  gap: 5px;
+}
+
+#dashboard {
+  display: none;
+}
+
+#login {
+  max-width: 400px;
+  margin: 80px auto;
+}
+
+#preview {
+  max-width: 150px;
+  max-height: 150px;
+  display: none;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+
+#qrisPreview {
+  max-width: 180px;
+  max-height: 180px;
+  display: none;
+  background: white;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.logout {
+  background: #e74c3c;
+  color: white;
+  float: right;
+}
+
+small {
+  color: #9eafc8;
+}
+
+@media(max-width:500px) {
+  .product {
+    align-items: flex-start;
+  }
+  .product img {
+    width: 48px;
+    height: 48px;
+  }
+  .actions {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>ZAMQIS STORE — ADMIN</h2>
+  <small>Dashboard pengelolaan toko</small>
+</header>
+
+<!-- LOGIN -->
+<div class="container" id="login">
+  <div class="box">
+    <h3>LOGIN ADMIN</h3>
+
+    <label>Username</label>
+    <input id="username" placeholder="Masukkan username">
+
+    <label>Password</label>
+    <input id="password" type="password" placeholder="Masukkan password">
+
+    <button class="primary" onclick="loginAdmin()">
+      MASUK DASHBOARD
+    </button>
+
+    <p id="loginInfo" style="color:#ff7777;margin-top:12px"></p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="container" id="dashboard">
+
+  <button class="logout" onclick="logoutAdmin()">LOGOUT</button>
+
+  <div style="clear:both;height:15px"></div>
+
+  <!-- PENGATURAN -->
+  <div class="box">
+    <h3>⚙ PENGATURAN TOKO</h3>
+
+    <label>Nama Toko</label>
+    <input id="namaToko" value="ZAMQIS STORE">
+
+    <label>Nomor WhatsApp Admin</label>
+    <input id="nomorWA" placeholder="6281234567890">
+
+    <button class="primary" onclick="simpanPengaturan()">
+      SIMPAN PENGATURAN
+    </button>
+  </div>
+
+  <!-- QRIS -->
+  <div class="box">
+    <h3>💳 PENGATURAN QRIS</h3>
+
+    <label>Upload Gambar QRIS</label>
+    <input type="file" id="qrisFile" accept="image/*" onchange="previewQRIS()">
+
+    <img id="qrisPreview">
+
+    <button class="primary" onclick="simpanQRIS()">
+      SIMPAN QRIS
+    </button>
+
+    <p><small>QRIS disimpan di browser perangkat ini.</small></p>
+  </div>
+
+  <!-- TAMBAH PRODUK -->
+  <div class="box">
+    <h3>➕ TAMBAH / EDIT PRODUK</h3>
+
+    <input type="hidden" id="editIndex">
+
+    <label>Pilih Game</label>
+    <select id="game">
+      <option value="ML">Mobile Legends</option>
+      <option value="PUBG">PUBG Mobile</option>
+      <option value="FF">Free Fire</option>
+    </select>
+
+    <label>Nama Produk</label>
+    <input id="namaProduk" placeholder="Contoh: 86 Diamond">
+
+    <label>Jumlah Diamond / UC</label>
+    <input id="jumlah" placeholder="Contoh: 86 Diamond">
+
+    <label>Harga Produk</label>
+    <input id="harga" type="number" placeholder="Contoh: 20000">
+
+    <label>Gambar Produk</label>
+    <input type="file" id="gambar" accept="image/*" onchange="previewGambar()">
+
+    <img id="preview">
+
+    <button class="primary" onclick="simpanProduk()">
+      SIMPAN PRODUK
+    </button>
+  </div>
+
+  <!-- DAFTAR PRODUK -->
+  <div class="box">
+    <h3>📦 DAFTAR PRODUK</h3>
+    <div id="daftarProduk"></div>
+  </div>
+
+  <!-- PESANAN -->
+  <div class="box">
+    <h3>🛒 RIWAYAT PESANAN</h3>
+    <div id="daftarPesanan"></div>
+    <button class="danger" onclick="hapusPesanan()">
+      HAPUS RIWAYAT PESANAN
+    </button>
+  </div>
+
+</div>
+
+<script>
+
+// LOGIN ADMIN
+// GANTI USERNAME DAN PASSWORD INI
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "zamqis123";
+
+function loginAdmin() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+
+  if(user === ADMIN_USER && pass === ADMIN_PASS) {
+    sessionStorage.setItem("zamqisLogin","true");
+    tampilDashboard();
+  } else {
+    document.getElementById("loginInfo").innerText =
+      "Username atau password salah!";
+  }
+}
+
+function tampilDashboard() {
+  document.getElementById("login").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+  tampilProduk();
+  tampilPengaturan();
+  tampilPesanan();
+}
+
+function logoutAdmin() {
+  sessionStorage.removeItem("zamqisLogin");
+  location.reload();
+}
+
+// DATABASE SEDERHANA BROWSER
+let produk = JSON.parse(localStorage.getItem("zamqisProduk")) || [];
+
+function simpanData() {
+  localStorage.setItem("zamqisProduk", JSON.stringify(produk));
+}
+
+// PREVIEW GAMBAR PRODUK
+function previewGambar() {
+  const file = document.getElementById("gambar").files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = e => {
+    document.getElementById("preview").src = e.target.result;
+    document.getElementById("preview").style.display = "block";
+  };
+
+  reader.readAsDataURL(file);
+}
+
+// SIMPAN PRODUK
+function simpanProduk() {
+  const game = document.getElementById("game").value;
+  const nama = document.getElementById("namaProduk").value.trim();
+  const jumlah = document.getElementById("jumlah").value.trim();
+  const harga = Number(document.getElementById("harga").value);
+  const file = document.getElementById("gambar").files[0];
+  const edit = document.getElementById("editIndex").value;
+
+  if(!nama || !jumlah || harga <= 0) {
+    alert("Lengkapi nama, jumlah dan harga produk!");
+    return;
+  }
+
+  function prosesGambar(gambar) {
+    const data = {game,nama,jumlah,harga,gambar};
+
+    if(edit !== "") {
+      produk[Number(edit)] = data;
+    } else {
+      produk.push(data);
+    }
+
+    simpanData();
+    tampilProduk();
+    resetForm();
+    alert("Produk berhasil disimpan!");
+  }
+
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = e => prosesGambar(e.target.result);
+    reader.readAsDataURL(file);
+  } else if(edit !== "") {
+    prosesGambar(produk[Number(edit)].gambar);
+  } else {
+    prosesGambar("");
+  }
+}
+
+// TAMPILKAN PRODUK
+function tampilProduk() {
+  const tempat = document.getElementById("daftarProduk");
+  tempat.innerHTML = "";
+
+  if(produk.length === 0) {
+    tempat.innerHTML = "<p>Belum ada produk.</p>";
+    return;
+  }
+
+  produk.forEach((p,i) => {
+    const namaGame = {
+      ML:"Mobile Legends",
+      PUBG:"PUBG Mobile",
+      FF:"Free Fire"
+    };
+
+    const div = document.createElement("div");
+    div.className = "product";
+
+    const img = document.createElement("img");
+    img.src = p.gambar || "https://placehold.co/100x100/14223a/36e0d0?text=GAME";
+    img.alt = p.nama;
+
+    const info = document.createElement("div");
+    info.className = "product-info";
+    const title = document.createElement("b");
+    title.textContent = p.nama;
+    const desc = document.createElement("p");
+    desc.textContent = (namaGame[p.game] || p.game) + " • " + p.jumlah + " • Rp" + p.harga.toLocaleString("id-ID");
+    info.append(title,desc);
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const editBtn = document.createElement("button");
+    editBtn.className = "edit";
+    editBtn.textContent = "EDIT";
+    editBtn.onclick = () => editProduk(i);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "danger";
+    deleteBtn.textContent = "HAPUS";
+    deleteBtn.onclick = () => hapusProduk(i);
+
+    actions.append(editBtn,deleteBtn);
+    div.append(img,info,actions);
+    tempat.appendChild(div);
+  });
+}
+
+// EDIT PRODUK
+function editProduk(i) {
+  const p = produk[i];
+
+  document.getElementById("editIndex").value = i;
+  document.getElementById("game").value = p.game;
+  document.getElementById("namaProduk").value = p.nama;
+  document.getElementById("jumlah").value = p.jumlah;
+  document.getElementById("harga").value = p.harga;
+
+  const preview = document.getElementById("preview");
+  preview.src = p.gambar || "";
+  preview.style.display = p.gambar ? "block" : "none";
+
+  document.getElementById("gambar").value = "";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// HAPUS PRODUK
+function hapusProduk(i) {
+  if(confirm("Yakin ingin menghapus produk ini?")) {
+    produk.splice(i,1);
+    simpanData();
+    tampilProduk();
+  }
+}
+
+function resetForm() {
+  document.getElementById("editIndex").value = "";
+  document.getElementById("game").value = "ML";
+  document.getElementById("namaProduk").value = "";
+  document.getElementById("jumlah").value = "";
+  document.getElementById("harga").value = "";
+  document.getElementById("gambar").value = "";
+  document.getElementById("preview").style.display = "none";
+}
+
+// PENGATURAN TOKO
+function simpanPengaturan() {
+  localStorage.setItem("zamqisNama",
+    document.getElementById("namaToko").value);
+
+  localStorage.setItem("zamqisWA",
+    document.getElementById("nomorWA").value);
+
+  alert("Pengaturan disimpan!");
+}
+
+function tampilPengaturan() {
+  document.getElementById("namaToko").value =
+    localStorage.getItem("zamqisNama") || "ZAMQIS STORE";
+
+  document.getElementById("nomorWA").value =
+    localStorage.getItem("zamqisWA") || "";
+}
+
+// QRIS
+function previewQRIS() {
+  const file = document.getElementById("qrisFile").files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = e => {
+    const img = document.getElementById("qrisPreview");
+    img.src = e.target.result;
+    img.style.display = "block";
+  };
+
+  reader.readAsDataURL(file);
+}
+
+function simpanQRIS() {
+  const file = document.getElementById("qrisFile").files[0];
+
+  if(!file) {
+    alert("Pilih gambar QRIS terlebih dahulu!");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = e => {
+    try {
+      localStorage.setItem("zamqisQRIS",e.target.result);
+      alert("QRIS berhasil disimpan!");
+    } catch(err) {
+      alert("Gambar terlalu besar. Gunakan gambar QRIS yang lebih kecil.");
+    }
+  };
+
+  reader.readAsDataURL(file);
+}
+
+// RIWAYAT PESANAN LOKAL
+function tampilPesanan() {
+  const data = JSON.parse(localStorage.getItem("zamqisPesanan")) || [];
+  const tempat = document.getElementById("daftarPesanan");
+
+  tempat.innerHTML = data.length ? "" : "<p>Belum ada pesanan.</p>";
+
+  data.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "product";
+
+    const info = document.createElement("div");
+    info.className = "product-info";
+    const title = document.createElement("b");
+    title.textContent = p.nama || "Pesanan";
+    const desc = document.createElement("p");
+    desc.textContent = p.game + " • " + p.id + " • " + p.harga;
+    info.append(title,desc);
+    div.append(info);
+    tempat.appendChild(div);
+  });
+}
+
+function hapusPesanan() {
+  if(confirm("Hapus semua riwayat pesanan di browser ini?")) {
+    localStorage.removeItem("zamqisPesanan");
+    tampilPesanan();
+  }
+}
+
+// CEK LOGIN
+if(sessionStorage.getItem("zamqisLogin") === "true") {
+  tampilDashboard();
+}
+
+</script>
+
+</body>
+</html>
